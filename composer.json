@@ -4,7 +4,8 @@
     "type": "project",
     "require": {
         "php": "^8.5",
-        "blackfox/simplemail": "^1.0"
+        "blackfox/simplemail": "^1.0",
+        "blackfox/getoptions": "^1.0"
     },
     "require-dev": {
         "symfony/var-dumper": "^8.1"

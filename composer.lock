@@ -4,8 +4,51 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "01abddc6bcef859959117e6412f11a08",
+    "content-hash": "4b91f2eb4babc9ae7e6d7e51e7ea38f8",
     "packages": [
+        {
+            "name": "blackfox/getoptions",
+            "version": "v1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/BlackFoxFire/getoptions.git",
+                "reference": "2a98bf356d83be7695c8c61c74649f8f11ed5113"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/BlackFoxFire/getoptions/zipball/2a98bf356d83be7695c8c61c74649f8f11ed5113",
+                "reference": "2a98bf356d83be7695c8c61c74649f8f11ed5113",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.5"
+            },
+            "require-dev": {
+                "symfony/var-dumper": "^8.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Blackfox\\GetOptions\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-2.1-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Christophe Dufour",
+                    "email": "blackfox@proximus.be"
+                }
+            ],
+            "description": "GetOptions permet de gérer les options passées en ligne de commande un script PHP",
+            "support": {
+                "issues": "https://github.com/BlackFoxFire/getoptions/issues",
+                "source": "https://github.com/BlackFoxFire/getoptions/tree/v1.0.1"
+            },
+            "time": "2026-10-26T08:37:49+00:00"
+        },
         {
             "name": "blackfox/simplemail",
             "version": "v1.0.2",
