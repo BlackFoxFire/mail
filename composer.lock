@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "blackfox/getoptions",
-            "version": "v1.0.1",
+            "version": "v1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/BlackFoxFire/getoptions.git",
-                "reference": "2a98bf356d83be7695c8c61c74649f8f11ed5113"
+                "reference": "2075f28baa10a0f6efa369c0d622fb5c4174fa91"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BlackFoxFire/getoptions/zipball/2a98bf356d83be7695c8c61c74649f8f11ed5113",
-                "reference": "2a98bf356d83be7695c8c61c74649f8f11ed5113",
+                "url": "https://api.github.com/repos/BlackFoxFire/getoptions/zipball/2075f28baa10a0f6efa369c0d622fb5c4174fa91",
+                "reference": "2075f28baa10a0f6efa369c0d622fb5c4174fa91",
                 "shasum": ""
             },
             "require": {
@@ -45,9 +45,9 @@
             "description": "GetOptions permet de gérer les options passées en ligne de commande un script PHP",
             "support": {
                 "issues": "https://github.com/BlackFoxFire/getoptions/issues",
-                "source": "https://github.com/BlackFoxFire/getoptions/tree/v1.0.1"
+                "source": "https://github.com/BlackFoxFire/getoptions/tree/v1.0.2"
             },
-            "time": "2026-10-26T08:37:49+00:00"
+            "time": "2026-10-26T10:06:11+00:00"
         },
         {
             "name": "blackfox/simplemail",
