@@ -14,19 +14,12 @@ if(php_sapi_name() !== "cli") {
     exit(1);
 }
 
-/**
- * Constantes
- * ----------
- */
-
 // Version de l'application
 define("VERSION", "1.0");
 // Dossier racine
 define("ROOT_DIR", dirname(__DIR__));
-// Pour le serveur smtp
-define("HOST", "relay.proximus.be");
-define("USER", "todolist@proximus.be");
-define("PASSWORD", "V7mYI0rYPhmT8Pp");
+// Fichier de configuration
+define("CONFIG_FILE", ROOT_DIR . str_replace('/', DIRECTORY_SEPARATOR, "/config/conf.json"));
 
 // Autoload de Composer
 require ROOT_DIR . str_replace('/', DIRECTORY_SEPARATOR, "/vendor/autoload.php");
@@ -35,18 +28,27 @@ require ROOT_DIR . str_replace('/', DIRECTORY_SEPARATOR, "/vendor/autoload.php")
 use Blackfox\GetOptions\GetOptions;
 use Blackfox\Simplemail\Simplemail;
 
-// Variables
-$shortOptions = "t:s:j:";
-$longOptions = [
-    "help",
-    "join:",
-    "to:",
-    "subject:",
-    "version"
-];
+/**
+ * Lit la configuration dans le fichier de conf
+ * 
+ * @param string $filename
+ * Le nom du fichier de configuration
+ * @return array
+ * Retourne un tableau contenant la configuration
+ * @throws Exception
+ * 
+ */
+function loadConfig(string $filename): array
+{
+    if(!is_readable($filename)) {
+        throw new Exception("Impossible de lire le fichier de configuration.");
+    }
 
-$mail = new Simplemail(HOST, USER, PASSWORD, false);
-$mail->setForm("todolist@proximus.be", "Todolist");
+    $file = new SplFileObject($filename, "r");
+    $contents = $file->fread($file->getSize());
+
+    return json_decode($contents, true);
+}
 
 /**
  * Afficher l'aide et quitter
@@ -56,15 +58,18 @@ $mail->setForm("todolist@proximus.be", "Todolist");
 function usage(): void
 {
     echo "mail.php
-Utilisation: mail --to DESTINATAIRE --subject \"SUJET\" \"MESSAGE\"
+Utilisation: mail [OPTIONS] --to DESTINATAIRE --subject \"SUJET\" \"MESSAGE\"
 Envoie un mail au DESTINATAIRE avec comme sujet SUJET comme message MESSAGE
 
 Options requise:
-    -t, --to        : le destinataire du message.
+    -t, --to        : le(s) destinataire(s) du message.
     -s, --subject   : le sujet du message.
 
 Options:
+    -c, --cc        : Le(s) destinataire(s) en copie pour le message.
     -j, --join      : Pièce jointe à ajouter.
+    -v, --verbose   : mode verbeux.
+    -q, --quiet     : mode silence.
     --help          : afficher l'aide et quitter.
     --version       : afficher des informations de version et quitter.
 ";
@@ -89,6 +94,24 @@ Ecrit par Christophe Dufour
 }
 
 try {
+    $config = loadConfig(CONFIG_FILE);
+    $mail = new Simplemail($config['smtp'], $config['user'], $config['password'], false);
+    $mail->setForm($config['user'], $config['name']);
+
+    $quiet = false;
+    $verbose = false;
+    $shortOptions = "t:s:j:c:qv";
+    $longOptions = [
+        "cc:",
+        "help",
+        "join:",
+        "quiet",
+        "to:",
+        "subject:",
+        "verbose",
+        "version"
+    ];
+
     // Récupération des options
     $options = GetOptions::options($shortOptions, $longOptions);
     // Récupération des arguments positionnels
@@ -107,13 +130,24 @@ try {
             switch($opt) {
                 case "t":
                 case "to": {
-                    $to = isset($opts['t']) ? $opts['t'] : $opts['to'];
+                    $to[]=$value;
 
-                    if(!filter_var($to, FILTER_VALIDATE_EMAIL)) {
-                        throw new Exception("Format d'adresse email invalide.");
+                    if(!filter_var($value, FILTER_VALIDATE_EMAIL)) {
+                        throw new Exception("Format d'adresse email invalide -- $value");
                     }
 
-                    $mail->addAddress($to);
+                    $mail->addAddress($value);
+                } break;
+
+                case "c":
+                case "cc": {
+                    $cc[]=$value;
+
+                    if(!filter_var($value, FILTER_VALIDATE_EMAIL)) {
+                        throw new Exception("Format d'adresse email invalide -- $value");
+                    }
+
+                    $mail->addCC($value);
                 } break;
 
                 case "s":
@@ -122,13 +156,28 @@ try {
                         throw new Exception("L'option suivante doit être unique -- subject.");
                     }
 
-                    $subject = isset($opts['s']) ? $opts['s'] : $opts['subject'];
+                    $subject = $value;
                 } break;
 
                 case "j":
                 case "join": {
-                    //
+                    $join[] = $value;
+
+                    if(!is_readable($value) || is_link($value)) {
+                        throw new Exception("Impossible de joindre le fichier -- $value");
+                    }
+                    $mail->addAttachment($value);
                 } break;
+
+                case "q":
+                case "quiet":
+                    $quiet = true;
+                    break;
+                    
+                case "v":
+                case "verbose":
+                    $verbose = true;
+                    break;
             }
         }
     }
@@ -146,7 +195,43 @@ try {
     }
 
     $msg = implode(' ', $argPos);
-    $mail->send($subject, $msg);
+    
+    if($mail->send($subject, $msg) === FALSE) {
+        throw new Exception("Erreur: message non envoyé.");
+    }
+    else {
+        if(!$quiet) {
+            if(!$verbose) {
+                echo "Message envoyé." . PHP_EOL;
+            }
+            else {
+                echo "Destinataire: ";
+                foreach($to as $t) {
+                    echo "$t  ";
+                }
+                echo PHP_EOL;
+
+                if(isset($cc)) {
+                    echo "Copie conforme à: ";
+                    foreach($cc as $c) {
+                        echo "$c  ";
+                    }
+                    echo PHP_EOL;
+                }
+
+                echo "Sujet: $subject" . PHP_EOL;
+                
+                if(isset($join)) {
+                    echo "Pièce(s) jointe(s): ";
+                    foreach($join as $j) {
+                        echo "$j  ";
+                    }
+                    echo PHP_EOL;
+                }
+                echo "Message envoyé" . PHP_EOL;
+            }
+        }
+    }
 
 }
 catch(Exception $e) {
