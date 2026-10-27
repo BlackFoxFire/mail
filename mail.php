@@ -17,7 +17,7 @@ if(php_sapi_name() !== "cli") {
 // Version de l'application
 define("VERSION", "1.0");
 // Dossier racine
-define("ROOT_DIR", dirname(__DIR__));
+define("ROOT_DIR", __DIR__);
 // Fichier de configuration
 define("CONFIG_FILE", ROOT_DIR . str_replace('/', DIRECTORY_SEPARATOR, "/config/conf.json"));
 

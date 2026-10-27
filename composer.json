@@ -11,11 +11,6 @@
         "symfony/var-dumper": "^8.1"
     },
     "license": "GPL-3.0-or-later",
-    "autoload": {
-        "psr-4": {
-            "Blackfox\\Mail\\": "src/"
-        }
-    },
     "authors": [
         {
             "name": "Christophe Dufour",
