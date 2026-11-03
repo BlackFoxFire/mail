@@ -95,9 +95,9 @@ Ecrit par Christophe Dufour
 
 try {
     $config = loadConfig(CONFIG_FILE);
-    $mail = Simplemail::get($config['smtp'], $config['user'], $config['password'], false, false);
+    $mail = Simplemail::getMailer($config['host'], $config['user'], $config['password'], false, false);
     $mail->isHTML(true);
-    $mail->setFrom($config['user'], $config['name']);
+    $mail->setFrom($config['email'], $config['name']);
 
     $quiet = false;
     $verbose = false;
