@@ -51,16 +51,16 @@
         },
         {
             "name": "blackfox/simplemail",
-            "version": "v1.1.0",
+            "version": "v1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/BlackFoxFire/simplemail.git",
-                "reference": "8ac9dc756fdd19d36d9f027e18e4577bba3fc551"
+                "reference": "d1040c09d187494c16ab16cff6fbbd8511b9fbb7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BlackFoxFire/simplemail/zipball/8ac9dc756fdd19d36d9f027e18e4577bba3fc551",
-                "reference": "8ac9dc756fdd19d36d9f027e18e4577bba3fc551",
+                "url": "https://api.github.com/repos/BlackFoxFire/simplemail/zipball/d1040c09d187494c16ab16cff6fbbd8511b9fbb7",
+                "reference": "d1040c09d187494c16ab16cff6fbbd8511b9fbb7",
                 "shasum": ""
             },
             "require": {
@@ -83,11 +83,16 @@
                 }
             ],
             "description": "Simplifie l'utilisation et l'envoie d'un message avec PHPMailer",
+            "keywords": [
+                "mail",
+                "mailer",
+                "phpmailer"
+            ],
             "support": {
                 "issues": "https://github.com/BlackFoxFire/simplemail/issues",
-                "source": "https://github.com/BlackFoxFire/simplemail/tree/v1.1.0"
+                "source": "https://github.com/BlackFoxFire/simplemail/tree/v1.1.1"
             },
-            "time": "2026-11-02T20:10:57+00:00"
+            "time": "2026-11-03T16:44:23+00:00"
         },
         {
             "name": "phpmailer/phpmailer",
