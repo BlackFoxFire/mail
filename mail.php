@@ -95,8 +95,9 @@ Ecrit par Christophe Dufour
 
 try {
     $config = loadConfig(CONFIG_FILE);
-    $mail = new Simplemail($config['smtp'], $config['user'], $config['password'], false);
-    $mail->setForm($config['user'], $config['name']);
+    $mail = Simplemail::get($config['smtp'], $config['user'], $config['password'], false, false);
+    $mail->isHTML(true);
+    $mail->setFrom($config['user'], $config['name']);
 
     $quiet = false;
     $verbose = false;
@@ -157,6 +158,7 @@ try {
                     }
 
                     $subject = $value;
+                    $mail->Subject = $value;
                 } break;
 
                 case "j":
@@ -195,8 +197,10 @@ try {
     }
 
     $msg = implode(' ', $argPos);
+    $mail->Body = $msg;
+    $mail->AltBody = $msg;
     
-    if($mail->send($subject, $msg) === FALSE) {
+    if($mail->send() === FALSE) {
         throw new Exception("Erreur: message non envoyé.");
     }
     else {
